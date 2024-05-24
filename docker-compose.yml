@@ -10,6 +10,11 @@ services:
       - ${NGINX_LOG_DIR:?}:/logs
     environment:
       - NGINX_ENVSUBST_TEMPLATE_SUFFIX=.nginx
+    logging:
+      driver: fluentd
+      options:
+        tag: docker.harmonica_aoirint_com.nginx.{{.ID}}
+        fluentd-async: "true"
 
   cloudflared:
     image: cloudflare/cloudflared:latest
@@ -19,3 +24,8 @@ services:
       - nginx
     environment:
       TUNNEL_TOKEN: ${CLOUDFLARED_TUNNEL_TOKEN:?}
+    logging:
+      driver: fluentd
+      options:
+        tag: docker.harmonica_aoirint_com.cloudflared.{{.ID}}
+        fluentd-async: "true"
